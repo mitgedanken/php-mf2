@@ -173,7 +173,11 @@ class ParserTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertEquals('<name>', $output['items'][0]['properties']['name'][0]);
 		$this->assertEquals('<url>', $output['items'][0]['properties']['url'][0]);
-		$this->assertEquals('<img>', $output['items'][0]['properties']['photo'][0]);
+		$result = [
+			'value' => '<img>',
+			'alt' => ''
+			];
+		$this->assertEquals($result, $output['items'][0]['properties']['photo'][0]);
 	}
 
 	public function testParsesRelValues() {
@@ -813,9 +817,9 @@ END;
 		// Use same parsing as Parser::__construct(), twice to have a comparison object.
 		libxml_use_internal_errors(true);
 		$refDoc = new \DOMDocument();
-		@$refDoc->loadHTML(Mf2\unicodeToHtmlEntities($input));
+		@$refDoc->loadHTML(Mf2\unicodeToHtmlEntities($input), \LIBXML_NOWARNING);
 		$inputDoc = new \DOMDocument();
-		@$inputDoc->loadHTML(Mf2\unicodeToHtmlEntities($input));
+		@$inputDoc->loadHTML(Mf2\unicodeToHtmlEntities($input), \LIBXML_NOWARNING);
 
 		// For completion sake, test PHP itself.
 		$this->assertEquals($refDoc, $inputDoc, 'PHP could not create identical DOMDocument instances.');
